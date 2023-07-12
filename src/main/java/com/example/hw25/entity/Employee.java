@@ -3,16 +3,22 @@ package com.example.hw25.entity;
 import java.util.Objects;
 
 public class Employee {
-    public final String firstName;
-    public final String lastName;
+    private final String firstName;
+    private final String lastName;
 
     public Employee(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public String getFirstName() {return firstName;}
-    public String getLastName() {return lastName;}
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
 
     @Override
     public String toString() {
