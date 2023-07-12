@@ -1,0 +1,60 @@
+package com.example.hw25.service;
+
+import com.example.hw25.entity.Employee;
+import com.example.hw25.exception.EmployeeAlreadyAddedException;
+import com.example.hw25.exception.EmployeeNotFoundException;
+import com.example.hw25.exception.EmployeeStorageIsFullException;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+@Service
+public class EmployeeService {
+    private  final Map<String, Employee> employeeByFullName = new HashMap<>();
+    private final int MAX_SIZE = 2;
+    public Employee add(String firstName, String lastName) {
+        if (employeeByFullName.size() >= MAX_SIZE) {
+            throw new EmployeeStorageIsFullException("Массив сотрудников переполнен");
+        }
+        Employee newEmployee = new Employee(firstName, lastName);
+        String fullName = getFullName(newEmployee);
+
+        if (employeeByFullName.containsKey(fullName)) {
+            throw new EmployeeAlreadyAddedException("Сотрудник " + newEmployee + " уже существует");
+        }
+
+        employeeByFullName.put(fullName, newEmployee);
+        return newEmployee;
+    }
+    public Employee find(String firstName, String lastName) {
+        Employee employeeForFind = new Employee(firstName, lastName);
+
+        String fullName = getFullName(employeeForFind);
+
+        checkExistence(fullName);
+
+        return employeeByFullName.get(fullName);
+    }
+    public Employee remove(String firstName, String lastName) {
+        Employee employeeForRemove = new Employee(firstName, lastName);
+        String fullName = getFullName(employeeForRemove);
+
+
+        checkExistence(fullName);
+        employeeByFullName.remove(fullName);
+        return employeeForRemove;
+    }
+
+    public Collection<Employee> getAll() {
+        return employeeByFullName.values();
+    }
+    private void checkExistence(String fullName){
+        if (!employeeByFullName.containsKey(fullName)){
+            throw new EmployeeNotFoundException("Такого сотрудника нет");}
+
+    }
+
+    private String getFullName(Employee employee) {
+        return employee.getFirstName() + employee.getLastName();
+    }
+}
