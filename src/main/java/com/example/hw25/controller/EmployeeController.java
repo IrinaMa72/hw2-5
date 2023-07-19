@@ -1,6 +1,7 @@
 package com.example.hw25.controller;
 
 import com.example.hw25.entity.Employee;
+import com.example.hw25.exception.InvalidNameException;
 import com.example.hw25.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,10 @@ public class EmployeeController {
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<String> handleException(Exception e) {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler({InvalidNameException.class})
+    public ResponseEntity<String> handleException(InvalidNameException e) {
+        return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
     public final EmployeeService employeeService;
 
